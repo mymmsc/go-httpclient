@@ -1,7 +1,7 @@
 // Copyright 2014-2019 Liu Dong <ddliuhb@gmail.com>.
 // Licensed under the MIT license.
 
-// Test httpclient with httpbin(http://httpbin.org)
+// Test httpclient with httpbin(http://baidu.com)
 package httpclient
 
 import (
@@ -13,12 +13,12 @@ import (
 	"testing"
 )
 
-// common response format on httpbin.org
+// common response format on baidu.com
 type ResponseInfo struct {
 	Gzipped   bool              `json:"gzipped"`
 	Method    string            `json:"method"`
 	Origin    string            `json:"origin"`
-	Useragent string            `json:"user-agent"` // http://httpbin.org/user-agent
+	Useragent string            `json:"user-agent"` // http://baidu.com/user-agent
 	Form      map[string]string `json:"form"`
 	Files     map[string]string `json:"files"`
 	Headers   map[string]string `json:"headers"`
@@ -28,7 +28,7 @@ type ResponseInfo struct {
 func TestRequest(t *testing.T) {
 	// get
 	res, err := NewHttpClient().
-		Get("http://httpbin.org/get")
+		Get("http://baidu.com/get")
 
 	if err != nil {
 		t.Error("get failed", err)
@@ -40,7 +40,7 @@ func TestRequest(t *testing.T) {
 
 	// post
 	res, err = NewHttpClient().
-		Post("http://httpbin.org/post", map[string]string{
+		Post("http://baidu.com/post", map[string]string{
 			"username": "dong",
 			"password": "******",
 		})
@@ -73,7 +73,7 @@ func TestRequest(t *testing.T) {
 
 	// post, multipart
 	res, err = NewHttpClient().
-		Post("http://httpbin.org/post", map[string]string{
+		Post("http://baidu.com/post", map[string]string{
 			"message": "Hello world!",
 			"@image":  "README.md",
 		})
@@ -116,7 +116,7 @@ func TestRequest(t *testing.T) {
 func TestResponse(t *testing.T) {
 	c := NewHttpClient()
 	res, err := c.
-		Get("http://httpbin.org/user-agent")
+		Get("http://baidu.com/user-agent")
 
 	if err != nil {
 		t.Error(err)
@@ -131,7 +131,7 @@ func TestResponse(t *testing.T) {
 	}
 
 	res, err = c.
-		Get("http://httpbin.org/user-agent")
+		Get("http://baidu.com/user-agent")
 
 	if err != nil {
 		t.Error(err)
@@ -140,7 +140,7 @@ func TestResponse(t *testing.T) {
 	body2, err := res.ReadAll()
 
 	res, err = c.
-		Get("http://httpbin.org/user-agent")
+		Get("http://baidu.com/user-agent")
 
 	if err != nil {
 		t.Error(err)
@@ -158,7 +158,7 @@ func TestResponse(t *testing.T) {
 
 func TestHead(t *testing.T) {
 	c := NewHttpClient()
-	res, err := c.Head("http://httpbin.org/get")
+	res, err := c.Head("http://baidu.com/get")
 	if err != nil {
 		t.Error(err)
 	}
@@ -175,7 +175,7 @@ func TestHead(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	c := NewHttpClient()
-	res, err := c.Delete("http://httpbin.org/delete")
+	res, err := c.Delete("http://baidu.com/delete")
 	if err != nil {
 		t.Error(err)
 	}
@@ -187,7 +187,7 @@ func TestDelete(t *testing.T) {
 
 func TestOptions(t *testing.T) {
 	c := NewHttpClient()
-	res, err := c.Options("http://httpbin.org")
+	res, err := c.Options("http://baidu.com")
 	if err != nil {
 		t.Error(err)
 	}
@@ -199,7 +199,7 @@ func TestOptions(t *testing.T) {
 
 func TestPatch(t *testing.T) {
 	c := NewHttpClient()
-	res, err := c.Patch("http://httpbin.org/patch")
+	res, err := c.Patch("http://baidu.com/patch")
 	if err != nil {
 		t.Error(err)
 	}
@@ -219,7 +219,7 @@ func TestPostJson(t *testing.T) {
 		Name: "httpclient",
 	}
 
-	res, err := c.PostJson("http://httpbin.org/post", jsonData)
+	res, err := c.PostJson("http://baidu.com/post", jsonData)
 	if err != nil {
 		t.Error(err)
 	}
@@ -239,7 +239,7 @@ func TestPutJson(t *testing.T) {
 		Name: "httpclient",
 	}
 
-	res, err := c.PutJson("http://httpbin.org/put", jsonData)
+	res, err := c.PutJson("http://baidu.com/put", jsonData)
 	if err != nil {
 		t.Error(err)
 	}
@@ -254,7 +254,7 @@ func TestHeaders(t *testing.T) {
 	res, err := NewHttpClient().
 		WithHeader("header1", "value1").
 		WithOption(OPT_REFERER, "http://google.com").
-		Get("http://httpbin.org/get")
+		Get("http://baidu.com/get")
 
 	if err != nil {
 		t.Error(err)
@@ -295,7 +295,7 @@ func _TestProxy(t *testing.T) {
 
 	res, err := NewHttpClient().
 		WithOption(OPT_PROXY, proxy).
-		Get("http://httpbin.org/get")
+		Get("http://baidu.com/get")
 
 	if err != nil {
 		t.Error(err)
@@ -309,7 +309,7 @@ func _TestProxy(t *testing.T) {
 		WithOption(OPT_PROXY_FUNC, func(*http.Request) (int, string, error) {
 			return PROXY_HTTP, proxy, nil
 		}).
-		Get("http://httpbin.org/get")
+		Get("http://baidu.com/get")
 
 	if err != nil {
 		t.Error(err)
@@ -324,7 +324,7 @@ func TestTimeout(t *testing.T) {
 	// connect timeout
 	res, err := NewHttpClient().
 		WithOption(OPT_CONNECTTIMEOUT_MS, 1).
-		Get("http://httpbin.org/get")
+		Get("http://baidu.com/get")
 
 	if err == nil {
 		t.Error("OPT_CONNECTTIMEOUT_MS does not work")
@@ -337,7 +337,7 @@ func TestTimeout(t *testing.T) {
 	// timeout
 	res, err = NewHttpClient().
 		WithOption(OPT_TIMEOUT, 3).
-		Get("http://httpbin.org/delay/3")
+		Get("http://baidu.com/delay/3")
 
 	if err == nil {
 		t.Error("OPT_TIMEOUT does not work")
@@ -350,7 +350,7 @@ func TestTimeout(t *testing.T) {
 	// no timeout
 	res, err = NewHttpClient().
 		WithOption(OPT_TIMEOUT, 100).
-		Get("http://httpbin.org/delay/3")
+		Get("http://baidu.com/delay/3")
 
 	if err != nil {
 		t.Error("OPT_TIMEOUT does not work properly")
@@ -371,13 +371,13 @@ func TestRedirect(t *testing.T) {
 			OPT_FOLLOWLOCATION: true,
 			OPT_MAXREDIRS:      10,
 		}).
-		Get("http://httpbin.org/redirect/3")
+		Get("http://baidu.com/redirect/3")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if res.StatusCode != 200 || res.Request.URL.String() != "http://httpbin.org/get" {
+	if res.StatusCode != 200 || res.Request.URL.String() != "http://baidu.com/get" {
 		t.Error("Redirect failed")
 	}
 
@@ -403,7 +403,7 @@ func TestRedirect(t *testing.T) {
 	// no follow
 	res, err = c.
 		WithOption(OPT_FOLLOWLOCATION, false).
-		Get("http://httpbin.org/relative-redirect/3")
+		Get("http://baidu.com/relative-redirect/3")
 
 	if err == nil {
 		t.Error("Must not follow location")
@@ -420,7 +420,7 @@ func TestRedirect(t *testing.T) {
 	// maxredirs
 	res, err = c.
 		WithOption(OPT_MAXREDIRS, 2).
-		Get("http://httpbin.org/relative-redirect/3")
+		Get("http://baidu.com/relative-redirect/3")
 
 	if err == nil {
 		t.Error("Must not follow through")
@@ -441,13 +441,13 @@ func TestRedirect(t *testing.T) {
 	// custom redirect policy
 	res, err = c.
 		WithOption(OPT_REDIRECT_POLICY, func(req *http.Request, via []*http.Request) error {
-			if req.URL.String() == "http://httpbin.org/relative-redirect/1" {
+			if req.URL.String() == "http://baidu.com/relative-redirect/1" {
 				return fmt.Errorf("should stop here")
 			}
 
 			return nil
 		}).
-		Get("http://httpbin.org/relative-redirect/3")
+		Get("http://baidu.com/relative-redirect/3")
 
 	if err == nil {
 		t.Error("Must not follow through")
@@ -470,7 +470,7 @@ func TestCookie(t *testing.T) {
 			Name:  "username",
 			Value: "dong",
 		}).
-		Get("http://httpbin.org/cookies")
+		Get("http://baidu.com/cookies")
 
 	if err != nil {
 		t.Error(err)
@@ -494,13 +494,13 @@ func TestCookie(t *testing.T) {
 		t.Error("cookie is not set properly")
 	}
 
-	if c.CookieValue("http://httpbin.org/cookies", "username") != "dong" {
+	if c.CookieValue("http://baidu.com/cookies", "username") != "dong" {
 		t.Error("cookie is not set properly")
 	}
 
 	// get old cookie
 	res, err = c.
-		Get("http://httpbin.org/cookies", nil)
+		Get("http://baidu.com/cookies", nil)
 
 	if err != nil {
 		t.Error(err)
@@ -522,7 +522,7 @@ func TestCookie(t *testing.T) {
 		t.Error("cookie lost")
 	}
 
-	if c.CookieValue("http://httpbin.org/cookies", "username") != "dong" {
+	if c.CookieValue("http://baidu.com/cookies", "username") != "dong" {
 		t.Error("cookie lost")
 	}
 
@@ -532,7 +532,7 @@ func TestCookie(t *testing.T) {
 			Name:  "username",
 			Value: "octcat",
 		}).
-		Get("http://httpbin.org/cookies")
+		Get("http://baidu.com/cookies")
 
 	if err != nil {
 		t.Error(err)
@@ -554,7 +554,7 @@ func TestCookie(t *testing.T) {
 		t.Error("cookie update failed")
 	}
 
-	if c.CookieValue("http://httpbin.org/cookies", "username") != "octcat" {
+	if c.CookieValue("http://baidu.com/cookies", "username") != "octcat" {
 		t.Error("cookie update failed")
 	}
 }
@@ -563,7 +563,7 @@ func TestGzip(t *testing.T) {
 	c := NewHttpClient()
 	res, err := c.
 		WithHeader("Accept-Encoding", "gzip, deflate").
-		Get("http://httpbin.org/gzip")
+		Get("http://baidu.com/gzip")
 
 	if err != nil {
 		t.Error(err)
@@ -592,7 +592,7 @@ func _TestCurrentUA(ch chan bool, t *testing.T, c *HttpClient, ua string) {
 	res, err := c.
 		Begin().
 		WithOption(OPT_USERAGENT, ua).
-		Get("http://httpbin.org/headers")
+		Get("http://baidu.com/headers")
 
 	if err != nil {
 		t.Error(err)
@@ -635,7 +635,7 @@ func TestConcurrent(t *testing.T) {
 func TestIssue10(t *testing.T) {
 	var testString = "gpThzrynEC1MdenWgAILwvL2CYuNGO9RwtbH1NZJ1GE31ywFOCY%2BLCctUl86jBi8TccpdPI5ppZ%2Bgss%2BNjqGHg=="
 	c := NewHttpClient()
-	res, err := c.Post("http://httpbin.org/post", map[string]string{
+	res, err := c.Post("http://baidu.com/post", map[string]string{
 		"a": "a",
 		"b": "b",
 		"c": testString,
@@ -669,7 +669,7 @@ func TestOptDebug(t *testing.T) {
 	c := NewHttpClient()
 	c.
 		WithOption(OPT_DEBUG, true).
-		Get("http://httpbin.org/get")
+		Get("http://baidu.com/get")
 }
 
 func TestUnsafeTLS(t *testing.T) {
@@ -706,7 +706,7 @@ func TestPutJsonWithCharset(t *testing.T) {
 	contentType := "application/json; charset=utf-8"
 	res, err := c.
 		WithHeader("Content-Type", contentType).
-		PutJson("http://httpbin.org/put", jsonData)
+		PutJson("http://baidu.com/put", jsonData)
 	if err != nil {
 		t.Error(err)
 	}
